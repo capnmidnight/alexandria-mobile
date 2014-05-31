@@ -1,0 +1,45 @@
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;font-family:sans-serif;}
+header,form{-webkit-transition-property:all;-webkit-transition-duration: 0.5s;-webkit-transition-timing-function:ease-in-out;transition-property:all;transition-duration: 0.5s;transition-timing-function:ease-in-out;}
+html,body,header,#main{position:absolute;}
+html,body,section,.textContent,#menu>p,#menu>a.button,#main,#chapter-bar,#chapter-name{width:100%;}
+html,body,section,.textContent{height:100%;}
+h1{font-size:200%;}
+h2{font-size:150%;}
+h3{font-size:125%;}
+h4{font-size:100%;}
+html,body,input,textarea,select{padding:0;}
+html,body,a.button,input,textarea,select{margin:0;border:0;}
+input[type=text],textarea{outline:none;}
+#menu,a.button{text-align:center;}
+aside{font-size:12pt;font-weight:bold;padding:0.5em;border-width:5px;top:2em;}
+td{width:3em;cursor:pointer;}
+aside,a.button{display:inline-block;}
+#menu>a.button,header{display:block;}
+aside{float:left;clear:left;}
+a.button{padding:0.5em;min-width:2.5em;text-decoration:none;cursor:pointer;border:solid 1px #ccc;border-radius:5px;}
+aside,aside a.button{margin-left:1em;margin-right:1em;}
+section,section>*{float:left;}
+section{clear:both;}
+section>*{clear:left;}
+.textContent{overflow-y:scroll;word-wrap:break-word;text-align:justify;padding-right:1em;}
+.sentence{border:solid 1px rgba(0, 255, 0, 0.5);}
+.paragraph{border:solid 1px rgba(0, 0, 255, 0.5);}
+::-webkit-scrollbar{width:5px;}
+@media(min-width:320px) {
+    .textContent, select, a.button {
+        font-size: 10pt;
+    }
+}
+#infobar{font-size:8pt;}}
+@media(min-width:641px) {
+    .textContent, select, a.button {
+        font-size: 14pt;
+    }
+}
+@media(min-width:1080px){
+.textContent,select,a.button{font-size:18pt;}
+section{padding-top:5em;padding-bottom:5em;padding-left:10em;padding-right:10em;}}
+#notifications{position:absolute;left:0;top:0;padding:0;margin:0;}
+a.button:active,.paragraph,::-webkit-scrollbar-thumb:vertical{background-color:#666;}
+aside a.button:active{background-color:#777;}
+::-webkit-scrollbar{background-color:#777;}
