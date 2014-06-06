@@ -17,7 +17,6 @@ if(options.m == "true"){
     minify(
         options.i || "html5",
         options.o || "obj",
-        options.c || "cur",
         options.v != "false",
         options.s == "true");
     srcDir = "obj";

@@ -30,21 +30,11 @@ var patterns = [
     }],
 ];
 
-function minify(inputDir, outputDir, tempDir, verbose, shrink){
+function minify(inputDir, outputDir, verbose, shrink){
     var output = verbose ? console.log.bind(console) : function(){};
 
     output("reading from: ", inputDir);
     output("writing to: ", outputDir);
-    output("deploying from: ", tempDir);
-
-    output("cleaning up deployment directory");
-    var files = fs.readdirSync(tempDir);
-    if(files){
-        files.forEach(function(file){
-            fs.unlink(path.join(tempDir, file));
-        });
-    }
-    output("done");
 
     output("processing input directory");
     fs.readdir(inputDir, function(err, files){
@@ -59,9 +49,8 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
                 var ext = path.extname(file).substring(1);
                 var inputFile = path.join(inputDir, file);
                 var outputFile = path.join(outputDir, file);
-                var tempFile = path.join(tempDir, file);
                 var opts = {};
-                var minify = shrink && ext == "js" && !/\.min/.test(file);
+                var minify = ext == "js" && !/\.min/.test(file);
                 if(minify || file == "index.html"){
                     opts.encoding = "utf8";
                 }
@@ -73,9 +62,13 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
                     var start = data.length;
                     strings = [];
                     regexes = [];
-                    patterns.forEach(function(pattern){
+                    patterns.forEach(function(pattern, iii){
                         while(pattern[0].test(data)){
+                            var aaa = data;
                             data = data.replace(pattern[0], pattern[1]);
+                            if(aaa.length == data.length){
+                                break;
+                            }
                         }
                     });
                     var saved = (start - data.length);
@@ -88,7 +81,7 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
                     if(body && body.length > 0){
                         body = body[0];
                         console.log(body);
-                        var test2 = /var curAppVersion\s?=\s?(\d+);/;
+                        var test2 = /var curAppVersion\s*=\s*(\d+);/;
                         body = body.match(test2);
                         if(body && body.length > 1){
                             var version = parseInt(body[1], 10);
@@ -115,17 +108,12 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
                         }
                     });
                 }
-                if(changed && (ext != "js" || !shrink)){
-                    fs.writeFileSync(tempFile, data, opts);
-                }
             });
             if(shrink){
                 shrunk += "\npageLoad();";
                 fs.writeFileSync(path.join(outputDir, "jwd.min.js"), shrunk, {encoding:"utf8"});
-                fs.writeFileSync(path.join(tempDir, "jwd.min.js"), shrunk, {encoding:"utf8"});
             }
             output("Total saved: ", total);
-            output("Deploying files: ", fs.readdirSync(tempDir));
         }
     });
     output("done");
