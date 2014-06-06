@@ -20,6 +20,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="src\controllers.js" />
+    <Compile Include="src\controllers\axvarss.js" />
     <Compile Include="src\xml2json.js" />
     <Content Include="html5\axva.png" />
     <Content Include="html5\axva64x64.png" />
@@ -42,6 +44,7 @@
   <ItemGroup>
     <Folder Include="html5" />
     <Folder Include="src" />
+    <Folder Include="src\controllers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />

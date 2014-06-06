@@ -2,16 +2,32 @@ var fs = require("fs"),
     mime = require("mime"),
     http = require("http"),
     rss = require("./xml2json.js"),
-    core = require("./core.js");
+    core = require("./core.js"),
+    routes = require("./controllers.js");
 
-var routes = [[/axvarss/g, getRSS]];
-function getRSS(matches, success, fail){
-    rss.get({
-        host: "www.alexandriava.gov",
-        path: "/rss.aspx"
-    }, function(json) {
-       success("application/json", JSON.stringify(json));
-    }, fail);
+function sendStaticFile(res, url, path){
+    fs.readFile(path, function (err, data){
+        if (err){
+            serverError(res, url);
+        }
+        else{
+            res.writeHead(200, { "Content-Type": mime.lookup(path) });
+            res.end(data);
+        }
+    });
+}
+
+function matchController(res, path){
+    for(var i = 0; i < routes.length; ++i){
+        var matches = path.match(routes[i][0]);
+        if(matches){
+            matches.shift();
+            routes[i][1].call(this, matches, function(mimeType, data){
+                res.writeHead(200, {"Content-Type": mimeType});
+                res.end(data);
+            }, serverError.bind(this, res, path));
+        }
+    }
 }
 
 module.exports = function(dirName){
@@ -22,28 +38,10 @@ module.exports = function(dirName){
             var path = dirName + req.url;
             fs.exists(path, function(yes){
                 if(yes){
-                    fs.readFile(path,
-                    function (err, data){
-                        if (err){
-                            serverError(res, req.url);
-                        }
-                        else{
-                            res.writeHead(200, { "Content-Type": mime.lookup(path) });
-                            res.end(data);
-                        }
-                    });
+                    sendStaticFile(res, req.url, path);
                 }
                 else{
-                    for(var i = 0; i < routes.length; ++i){
-                        var matches = path.match(routes[i][0]);
-                        if(matches){
-                            matches.shift();
-                            routes[i][1].call(this, matches, function(mimeType, data){
-                                res.writeHead(200, {"Content-Type": mimeType});
-                                res.end(data);
-                            }, serverError.bind(this, res, path));
-                        }
-                    }
+                    matchController(res, path)
                 }
             });
         }
