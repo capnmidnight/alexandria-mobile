@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{e7e06f33-eb96-4a1a-95cb-a856e8023b50}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -20,6 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="src\xml2json.js" />
     <Content Include="html5\axva.png" />
     <Content Include="html5\axva64x64.png" />
     <Content Include="html5\index.html" />
@@ -32,6 +33,7 @@
     <Compile Include="html5\psychologist.js" />
     <Compile Include="html5\stuffing.js" />
     <Compile Include="src\core.js" />
+    <Compile Include="src\httpCacher.js" />
     <Compile Include="src\minifier.js" />
     <Compile Include="src\options.js" />
     <Compile Include="src\webServer.js" />

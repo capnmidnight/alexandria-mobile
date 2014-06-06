@@ -1,19 +1,17 @@
 var fs = require("fs"),
     mime = require("mime"),
     http = require("http"),
+    rss = require("./xml2json.js"),
     core = require("./core.js");
 
 var routes = [[/axvarss/g, getRSS]];
 function getRSS(matches, success, fail){
-    var req = http.get("http://www.alexandriava.gov/rss.aspx", function (res){
-        res.setEncoding("utf8");
-        res.on("data", function(chunk){
-            console.log("DAT:", chunk);
-            success(mime.lookup("anything.xml"), chunk);
-        });
+    rss.get({
+        host: "www.alexandriava.gov",
+        path: "/rss.aspx"
+    }, function(json) {
+       success("application/json", JSON.stringify(json));
     }, fail);
-
-    req.end();
 }
 
 module.exports = function(dirName){

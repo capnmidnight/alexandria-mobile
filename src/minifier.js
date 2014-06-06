@@ -37,13 +37,16 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
     output("writing to: ", outputDir);
     output("deploying from: ", tempDir);
 
+    output("cleaning up deployment directory");
     var files = fs.readdirSync(tempDir);
     if(files){
         files.forEach(function(file){
             fs.unlink(path.join(tempDir, file));
         });
     }
+    output("done");
 
+    output("processing input directory");
     fs.readdir(inputDir, function(err, files){
         if(err){
             console.error(err);
@@ -51,17 +54,19 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
         else{
             var total = 0;
             var shrunk = "";
+            output("\tfiles found: " + files.length);
             files.forEach(function(file){
                 var ext = path.extname(file).substring(1);
                 var inputFile = path.join(inputDir, file);
                 var outputFile = path.join(outputDir, file);
                 var tempFile = path.join(tempDir, file);
                 var opts = {};
-                var minify = ext == "js" && !/\.min/.test(file);
+                var minify = shrink && ext == "js" && !/\.min/.test(file);
                 if(minify || file == "index.html"){
                     opts.encoding = "utf8";
                 }
-
+                
+                output("\t" + file + " " + (minify ? "" : "not ") + "minifying");
                 var data = fs.readFileSync(inputFile, opts);
                 var data2 = fs.existsSync(outputFile) && fs.readFileSync(outputFile, opts);
                 if(minify){
@@ -123,6 +128,7 @@ function minify(inputDir, outputDir, tempDir, verbose, shrink){
             output("Deploying files: ", fs.readdirSync(tempDir));
         }
     });
+    output("done");
 }
 
 module.exports = minify;
