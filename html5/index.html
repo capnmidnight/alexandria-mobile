@@ -196,9 +196,9 @@
         var s = document.createElement("script");
         s.async = 1;
         s.addEventListener("load", function () {
-            require("psychologist.js", "stuffing.js", "app.js");
+            include("require.js", "psychologist.js", "stuffing.js", "app.js", "notes.js");
         }, false);
-        s.src = "require.js#v" + curAppVersion;
+        s.src = "include.js#v" + curAppVersion;
         document.body.appendChild(s);
     </script>
 </body>

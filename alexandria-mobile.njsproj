@@ -20,14 +20,16 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="html5\notes.js" />
+    <Compile Include="html5\require.js" />
     <Compile Include="src\controllers.js" />
-    <Compile Include="src\controllers\axvarss.js" />
+    <Compile Include="src\controllers\axva-rss.js" />
     <Compile Include="src\xml2json.js" />
     <Content Include="html5\axva.png" />
     <Content Include="html5\axva64x64.png" />
     <Content Include="html5\index.html" />
     <Content Include="package.json" />
-    <Compile Include="html5\require.js" />
+    <Compile Include="html5\include.js" />
     <Compile Include="minify.js" />
     <Compile Include="server.js" />
     <Content Include="html5\style.css" />

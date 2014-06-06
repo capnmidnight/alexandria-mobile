@@ -1,7 +1,7 @@
 ﻿var rss = require("../xml2json.js");
 
 module.exports = {
-    pattern: /axvarss/g,
+    pattern: /axva-rss/g,
     handler: function(matches, success, fail){
         rss.get({
             host: "www.alexandriava.gov",

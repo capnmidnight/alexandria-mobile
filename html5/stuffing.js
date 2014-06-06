@@ -138,3 +138,13 @@ function fileUpload(fup){
 
     return fup;
 }
+
+function identityFunc() { }
+
+function getData(path, success, fail) {
+    getText(path, function(txt){
+        success(JSON.parse(txt));
+    }, fail);
+}
+
+try{ module.exports.getData = getData; }catch(err){}

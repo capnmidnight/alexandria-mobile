@@ -1,53 +1,15 @@
 var header = null,
-    main = null,
-    notes = null;
-
-function identityFunc() { }
+    main = null;
 
 function getControls() {
     window.addEventListener("resize", resize, false);
     window.addEventListener("popstate", moveHistory, false);
 
     main = getDOM("#main");
-    notes = getDOM("#notes>ul");
 
     header = getDOM("header");
     header.style.left = 0;
     header.style.opacity = 1;
-}
-
-function getData(path, success, fail) {
-    var req = new XMLHttpRequest();
-    req.addEventListener("progress", identityFunc);
-    req.addEventListener("load", function () {
-        success(JSON.parse(req.responseText));
-    });
-    req.addEventListener("error", fail || identityFunc);
-    req.addEventListener("abort", fail || identityFunc);
-    req.open("GET", path);
-    req.send();
-}
-
-
-function notesScreenShow() {
-    getData("axvarss", function (obj) {
-        notes.innerHTML = "";
-        obj.rss.channel.item.forEach(function (item) {
-            var li = document.createElement("li");
-            var link = document.createElement("a");
-            link.innerHTML = item.title;
-            link.href = item.link;
-            var date = document.createElement("span");
-            date.innerHTML = item.pubDate;
-            var text = document.createElement("div");
-            text.innerHTML = item.description;
-            li.appendChild(link);
-            li.appendChild(date);
-            li.appendChild(text);
-            notes.appendChild(li);
-        });
-        console.log(obj);
-    }, alert);
 }
 
 function mapScreenShow() { }
@@ -95,7 +57,6 @@ function firstNavigation() {
     if (document.location.hash.length > 0) {
         tab = document.location.hash.substring(1);
     }
-    console.log("lastView", lastView);
     if (tab && tab.length > 0) {
         showTab(tab);
     }
