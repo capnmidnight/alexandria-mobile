@@ -19,10 +19,10 @@ function sendStaticFile(res, url, path){
 
 function matchController(res, path){
     for(var i = 0; i < routes.length; ++i){
-        var matches = path.match(routes[i][0]);
+        var matches = path.match(routes[i].pattern);
         if(matches){
             matches.shift();
-            routes[i][1].call(this, matches, function(mimeType, data){
+            routes[i].handler.call(this, matches, function(mimeType, data){
                 res.writeHead(200, {"Content-Type": mimeType});
                 res.end(data);
             }, serverError.bind(this, res, path));
