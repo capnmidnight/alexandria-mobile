@@ -1,7 +1,7 @@
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;font-family:sans-serif;}
 header,form{-webkit-transition-property:all;-webkit-transition-duration: 0.5s;-webkit-transition-timing-function:ease-in-out;transition-property:all;transition-duration: 0.5s;transition-timing-function:ease-in-out;}
 html,body,header,#main{position:absolute;}
-html,body,section,#menu>p,#menu>a.button,#main,#notes>ul{width:100%;}
+html,body,section,#menu>p,#menu>a.button,#main,#main>div,#notes>ul{width:100%;}
 html,body,section{height:100%;}
 #main{overflow:scroll;}
 h1{font-size:200%;}
