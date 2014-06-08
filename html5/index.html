@@ -19,7 +19,7 @@
         </header>
         <div id="main">
             <section id="notes"><ul></ul></section>
-            <section id="map"></section>
+            <section id="map"><div id="inner-map"></div></section>
             <section id="calendar"></section>
 
             <section id="about">
@@ -196,7 +196,7 @@
         var s = document.createElement("script");
         s.async = 1;
         s.addEventListener("load", function () {
-            include("require.js", "psychologist.js", "stuffing.js", "app.js", "notes.js");
+            include("require.js", "psychologist.js", "stuffing.js", "mapping.js", "app.js", "notes.js");
         }, false);
         s.src = "include.js#v" + curAppVersion;
         document.body.appendChild(s);

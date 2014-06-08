@@ -1,15 +1,24 @@
 ﻿function getScript(src, success, fail) {
-    if(!/http(s):/.test(src)){
-        src = src + "#v" + curAppVersion;
+    if(!this.history){
+          this.history = {};
     }
-    var s = document.createElement("script");
-    s.type = "text/javascript";
-    s.async = true;
-    s.addEventListener("error", fail);
-    s.addEventListener("abort", fail);
-    s.addEventListener("load", success);
-    document.head.appendChild(s);
-    s["src"] = src;
+    var history = this.history;
+    if(!history[src]){
+        if(!/http(s):/.test(src)){
+            src = src + "#v" + curAppVersion;
+        }
+        var s = document.createElement("script");
+        s.type = "text/javascript";
+        s.async = true;
+        s.addEventListener("error", fail);
+        s.addEventListener("abort", fail);
+        s.addEventListener("load", function(){
+            history[src] = true;
+            success();
+        });
+        document.head.appendChild(s);
+        s["src"] = src;
+    }
 }
 
 var include = (function () {
@@ -39,14 +48,9 @@ var include = (function () {
         }
         var v = (g * 100 / c);
         Gs.left = v + "%";
-        if (c > 2 && c == g + 2) {
-            pageLoad(
-                set.bind(window, 1, "loadData"),
-                set.bind(window, 1, "init"));
-        }
-        if (c == g) {
+        if (c > 0 && c == g) {
             document.body.removeChild(G);
-            resize();
+            pageLoad();
         }
     }
 
@@ -75,8 +79,6 @@ var include = (function () {
     function include() {
         var libs = Array.prototype.slice.call(arguments);
         libs.forEach(set.bind(this, 0));
-        set(0, "init");
-        set(0, "loadData");
         tryAppend(loadLibs.bind(this, libs));
     }
 

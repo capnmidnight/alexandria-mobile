@@ -1,20 +1,37 @@
 var header = null,
-    main = null;
+    main = null,
+    mapBox = null,
+    map = null;
 
 function getControls() {
-    window.addEventListener("resize", resize, false);
-    window.addEventListener("popstate", moveHistory, false);
-
-    main = getDOM("#main");
-
     header = getDOM("header");
     header.style.left = 0;
     header.style.opacity = 1;
+
+    main = getDOM("#main");
+
+    mapBox = getDOM("#inner-map");
+    loadMap("#inner-map");
+
+    window.addEventListener("resize", resize, false);
+    window.addEventListener("popstate", moveHistory, false);
 }
 
-function mapScreenShow() { }
+function resize() {
+    var windowHeight = Math.min(window.innerHeight, screen.availHeight);
+    // the extra 2 pixels is to avoid a small scroll overlap with the window edge
+    main.style.height = px(windowHeight - header.clientHeight - 2);
+    main.style.top = px(header.clientHeight);
+    if(map) {
+        mapBox.style.width = "100%";
+        mapBox.style.height = "100%";
+        map.setSize(new MQA.Size(px(mapBox.clientWidth), px(mapBox.clientHeight)));
+    }
+    window.scrollX = window.scrollY = 0;
+}
+
 function calendarScreenShow() { }
-function aboutScreenShow() { }settings
+function aboutScreenShow() { }
 
 
 function showTab(tab, skipState) {
@@ -44,14 +61,6 @@ function moveHistory(evt) {
     }
 }
 
-function resize() {
-    var windowHeight = Math.min(window.innerHeight, screen.availHeight);
-    // the extra 2 pixels is to avoid a small scroll overlap with the window edge
-    main.style.height = px(windowHeight - header.clientHeight - 2);
-    main.style.top = px(header.clientHeight);
-    window.scrollX = window.scrollY = 0;
-}
-
 function firstNavigation() {
     var tab, lastView = getSetting("lastView");
     if (document.location.hash.length > 0) {
@@ -68,23 +77,12 @@ function firstNavigation() {
     }
 }
 
-function pageLoad(loadDataDone, initDone) {
-    var doneDone = function () {
-        if (loadDataDone) {
-            loadDataDone();
-        }
-        firstNavigation();
-        if (initDone) {
-            initDone();
-        }
-    };
+function pageLoad() {
     try {
         getControls();
-        clockTick();
-        resize();
-        loadData(doneDone);
+        firstNavigation();
     }
     catch (exp) {
-        doneDone();
+        console.error(exp);
     }
 }

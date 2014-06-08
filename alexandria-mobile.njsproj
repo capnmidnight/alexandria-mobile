@@ -21,6 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="html5\mapping.js" />
     <Compile Include="html5\notes.js" />
     <Compile Include="html5\require.js" />
     <Compile Include="src\controllers.js" />
