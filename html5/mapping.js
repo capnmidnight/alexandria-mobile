@@ -22,9 +22,9 @@ function loadMap() {
         geoLocationControl();
         mouseWheelZoom();
 
-        window.addEventListener("touchmove", touchmovemap);
-        window.addEventListener("touchend", resetMapMove);
-        window.addEventListener("touchstart", resetMapMove);
+        mapBox.addEventListener("touchmove", touchmovemap);
+        mapBox.addEventListener("touchend", resetMapMove);
+        mapBox.addEventListener("touchstart", resetMapMove);
 
         navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
         mapScreenShow();
@@ -133,7 +133,6 @@ function setMarker(position){
         if(this.marker){
             map.removeShape(this.marker);
         }
-        console.log(position.coords);
         var loc = { lat: position.coords.latitude, lng: position.coords.longitude };
         this.marker = new MQA.Poi(loc);
         map.addShape(this.marker);

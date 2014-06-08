@@ -4,28 +4,28 @@
         notes.innerHTML = "";
         for(var key in obj){
             if(obj.hasOwnProperty(key)){
-                var header = document.createElement("h2");
-                header.innerHTML = obj[key].channel.title.match(/\|?\s*(.+)/)[1];
-                notes.appendChild(header);
+                var header = document.createElement("h2"),
+                    ul = document.createElement("ul");
 
-                var ul = document.createElement("ul");
+                header.innerHTML = obj[key].channel.title.match(/\|?\s*(.+)/)[1];
+
+                notes.appendChild(header);
                 notes.appendChild(ul);
         
                 obj[key].channel.item.forEach(function (item) {
-                    var li = document.createElement("li");
-                    ul.appendChild(li);
+                    var li = document.createElement("li"),
+                        link = document.createElement("a"),
+                        date = document.createElement("span"),
+                        text = document.createElement("div");
 
-                    var link = document.createElement("a");
                     link.innerHTML = item.title;
                     link.href = item.link;
-                    li.appendChild(link);
+                    date.innerHTML = item.pubDate;                    
+                    text.innerHTML = cleanupRSS(item.description);
 
-                    var date = document.createElement("span");
-                    date.innerHTML = item.pubDate;
+                    ul.appendChild(li);
+                    li.appendChild(link);
                     li.appendChild(date);
-                    
-                    var text = document.createElement("div");
-                    text.innerHTML = item.description;
                     li.appendChild(text);
                 });
             }

@@ -36,8 +36,7 @@ function calendarScreenShow() {
             link.href = item.link;
             start.innerHTML = "start: " + startDate.toString();
             end.innerHTML = "end: " + endDate.toString();
-            text.innerHTML = item.description;
-            text.innerHTML = text.innerText || text.textContent || text.innerHTML;
+            text.innerHTML = cleanupRSS(item.description);
 
             ul.appendChild(li);
             li.appendChild(link);

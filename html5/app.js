@@ -30,6 +30,25 @@ function resize() {
     window.scrollX = window.scrollY = 0;
 }
 
+var tagWhitelist = ["a", "u", "p", "br", "em", "ul", "li", "h1", "h2", "h3", "h4", "h5", "h6", "div", "font", "span", "strong"];
+
+function cleanupRSS(txt){
+    return txt.replace(/&lt;([\w:]+)((?:\s+[\w:]+\s*=\s*("|').+?\3)*)\s*(\/&gt;|&gt;(.*?)&lt;\/\1&gt;)/g, function(match, tag, attrs, quote, xfv, text, index, doc){
+        if(tagWhitelist.indexOf(tag.toLowerCase()) > -1){
+            if(xfv == "/&gt;"){
+                return fmt("<$1/>", tag);
+            }
+            else {
+                return fmt("<$1 $2>$3</$1>", tag, attrs, text);
+            }
+        }
+        else{
+            console.log(tag, match);
+            return match;
+        }
+    });
+}
+
 function showTab(tab, skipState) {
     var boxes = getDOMAll("#main>*");
     boxes.forEach(function (box, i) {
