@@ -25,52 +25,89 @@
             setMarker(position);
             navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
 
-            mapBox.addEventListener("touchmove", function(evt){
-                var x = 0, y = 0;
-                for(var i = 0; i < evt.touches.length; ++i){
-                    var touch = evt.touches[i];
-                    x += touch.clientX;
-                    y += touch.clientY;
-                }
-
-                x /= evt.touches.length;
-                y /= evt.touches.length;
-
-                if(this.lastX != undefined && this.lastY != undefined){
-                    var dx = x - this.lastX;
-                    var dy = y - this.lastY;
-                    var xAxis = Math.abs(dx) >= Math.abs(dy);
-                    if(xAxis){
-                        if(dx < 0){
-                            map.panEast();
-                        }
-                        else if(dx > 0){
-                            map.panWest();
-                        }
-                    }
-                    else{
-                        if(dy < 0){
-                            map.panSouth();
-                        }
-                        else if(dy > 0){
-                            map.panNorth();
-                        }
-                    }
-                }
-
-                this.lastX = x;
-                this.lastY = y;
-                evt.preventDefault();
-            });
+            window.addEventListener("touchmove", touchmovemap);
+            window.addEventListener("touchend", resetMapMove);
+            window.addEventListener("touchstart", resetMapMove);
         }, locErr, mapOpts);
     }, function(err){
         console.error("Couldn't load MapQuest: ", err);
     });
 }
 
+function touchmovemap(evt){
+    switch(evt.touches.length){
+        case 1:
+            moveMap(evt.touches[0]);
+            break;
+        case 2:
+            zoomMap(evt.touches[0], evt.touches[1]);
+            break;
+    }
+    evt.preventDefault();
+}
+
+var lastMoveX = -1, lastMoveY = -1, lastDistance = -1;
+
+function resetMapMove(){
+    lastMoveX = -1;
+    lastMoveY = -1;
+    lastDistance = -1;
+}
+
+var zoomThreshold = 20;
+
+function zoomMap(a, b){
+    var dx = a.clientX - b.clientX;
+    var dy = a.clientY - b.clientY
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    var deltaDistance = 0;
+    if(lastDistance > -1){
+        var zoom = map.getZoomLevel();
+        var deltaDistance = distance - lastDistance;
+        if(Math.abs(deltaDistance) >= zoomThreshold){
+            if(deltaDistance <= -zoomThreshold){
+                --zoom;
+            }
+            else if(deltaDistance >= zoomThreshold){
+                ++zoom;
+            }
+
+            zoom = Math.max(2, Math.min(18, zoom));
+            map.setZoomLevel(zoom);
+            lastDistance = -1;
+        }
+    }
+    if(lastDistance == -1 || deltaDistance >= zoomThreshold){
+        lastDistance = distance;
+    }
+}
+
+function moveMap(point){
+    if(lastMoveX > -1 && lastMoveY > -1){
+        var dx = point.clientX - lastMoveX;
+        var dy = point.clientY - lastMoveY;
+        var bounds = map.getBounds();
+        var center = map.getCenter();
+        var dLat = bounds.lr.lat - bounds.ul.lat;
+        var dLng = bounds.lr.lng - bounds.ul.lng;
+        center.lat -= dy * dLat / map.height;
+        center.lng -=  dx * dLng / map.width;
+        map.setCenter(center);
+    }
+
+    lastMoveX = point.clientX;
+    lastMoveY = point.clientY;
+}
+
 function mouseWheelZoom(){
     MQA.withModule('mousewheel', function() {
         map.enableMouseWheelZoom();
+    });
+}
+
+function largeZoom(){
+    MQA.withModule('largezoom', function() {
+        map.addControl(new MQA.LargeZoom(), new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5)));
     });
 }
 
