@@ -21,11 +21,56 @@
             });
             smallZoom();
             geoLocationControl();
+            mouseWheelZoom();
             setMarker(position);
             navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
+
+            mapBox.addEventListener("touchmove", function(evt){
+                var x = 0, y = 0;
+                for(var i = 0; i < evt.touches.length; ++i){
+                    var touch = evt.touches[i];
+                    x += touch.clientX;
+                    y += touch.clientY;
+                }
+
+                x /= evt.touches.length;
+                y /= evt.touches.length;
+
+                if(this.lastX != undefined && this.lastY != undefined){
+                    var dx = x - this.lastX;
+                    var dy = y - this.lastY;
+                    var xAxis = Math.abs(dx) >= Math.abs(dy);
+                    if(xAxis){
+                        if(dx < 0){
+                            map.panEast();
+                        }
+                        else if(dx > 0){
+                            map.panWest();
+                        }
+                    }
+                    else{
+                        if(dy < 0){
+                            map.panSouth();
+                        }
+                        else if(dy > 0){
+                            map.panNorth();
+                        }
+                    }
+                }
+
+                this.lastX = x;
+                this.lastY = y;
+                evt.preventDefault();
+            });
         }, locErr, mapOpts);
     }, function(err){
         console.error("Couldn't load MapQuest: ", err);
+    });
+}
+
+function mouseWheelZoom(){
+    MQA.withModule('mousewheel', function() {
+        map.enableMouseWheelZoom();
     });
 }
 
