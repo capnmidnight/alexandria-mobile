@@ -13,22 +13,35 @@
         navigator.geolocation.getCurrentPosition(function(position) {
             map = new MQA.TileMap({
                 elt: mapBox,
+                latLng: { lat: position.coords.latitude, lng: position.coords.longitude },
                 zoom: 13,
                 mtype: 'osm',
                 bestFitMargin: 0,
                 zoomOnDoubleClick: true
             });
-            MQA.withModule('smallzoom', function() {
-                map.addControl(new MQA.SmallZoom(), new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5)));
-            });
-            MQA.withModule('viewoptions', function() {
-                map.addControl(new MQA.ViewOptions());
-            });
             setMarker(position);
             navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
         }, locErr, mapOpts);
+        smallZoom();
+        geoLocationControl();
     }, function(err){
         console.error("Couldn't load MapQuest: ", err);
+    });
+}
+
+function smallZoom(){
+    MQA.withModule('smallzoom', function() {
+        map.addControl(new MQA.SmallZoom(), new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5)));
+    });
+}
+function viewOptions(){
+    MQA.withModule('viewoptions', function() {
+        map.addControl(new MQA.ViewOptions());
+    });
+}
+function geoLocationControl(){
+    MQA.withModule('geolocationcontrol', function() {
+        map.addControl(new MQA.GeolocationControl());
     });
 }
 
@@ -38,7 +51,6 @@ function setMarker(position){
     }
     var loc = { lat: position.coords.latitude, lng: position.coords.longitude };
     this.marker = new MQA.Poi(loc);
-    map.setCenter(loc);
     map.addShape(this.marker);
 }
 

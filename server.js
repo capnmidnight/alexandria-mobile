@@ -18,11 +18,13 @@ if(options.m == "true"){
         options.i || "html5",
         options.o || "obj",
         options.v != "false",
-        options.s == "true");
+        options.s != "false");
     srcDir = "obj";
 }
 
 var app = http.createServer(webServer(srcDir));
 
 app.listen(8080);
-proc(startProc, ["http://localhost:8080"]);
+if(options.m != "true"){
+    proc(startProc, ["http://localhost:8080"]);
+}
