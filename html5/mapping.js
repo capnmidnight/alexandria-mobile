@@ -1,34 +1,33 @@
-﻿function loadMap() {
-    var mapOpts = {
-        enableHighAccuracy: true, 
-        maximumAge        : 500, 
-        timeout           : Infinity
-    };
+﻿function locErr(err){
+    console.error("Couldn't get location: ", err);
+};
 
-    var locErr = function(err){
-        console.error("Couldn't get location: ", err);
-    };
+var mapOpts = {
+    enableHighAccuracy: true, 
+    maximumAge        : 500, 
+    timeout           : Infinity
+};
+
+function loadMap() {
 
     getScript("http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluur2g6yn9%2Cb5%3Do5-9az2ur", function(){
-        navigator.geolocation.getCurrentPosition(function(position) {
-            map = new MQA.TileMap({
-                elt: mapBox,
-                latLng: { lat: position.coords.latitude, lng: position.coords.longitude },
-                zoom: 13,
-                mtype: 'osm',
-                bestFitMargin: 0,
-                zoomOnDoubleClick: true
-            });
-            smallZoom();
-            geoLocationControl();
-            mouseWheelZoom();
-            setMarker(position);
-            navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
+        map = new MQA.TileMap({
+            elt: mapBox,
+            zoom: 13,
+            mtype: 'osm',
+            bestFitMargin: 0,
+            zoomOnDoubleClick: true
+        });
+        smallZoom();
+        geoLocationControl();
+        mouseWheelZoom();
 
-            window.addEventListener("touchmove", touchmovemap);
-            window.addEventListener("touchend", resetMapMove);
-            window.addEventListener("touchstart", resetMapMove);
-        }, locErr, mapOpts);
+        window.addEventListener("touchmove", touchmovemap);
+        window.addEventListener("touchend", resetMapMove);
+        window.addEventListener("touchstart", resetMapMove);
+
+        navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
+        mapScreenShow();
     }, function(err){
         console.error("Couldn't load MapQuest: ", err);
     });
@@ -130,13 +129,22 @@ function geoLocationControl(){
 }
 
 function setMarker(position){
-    if(this.marker){
-        map.removeShape(this.marker);
+    if(window["MQA"]){
+        if(this.marker){
+            map.removeShape(this.marker);
+        }
+        console.log(position.coords);
+        var loc = { lat: position.coords.latitude, lng: position.coords.longitude };
+        this.marker = new MQA.Poi(loc);
+        map.addShape(this.marker);
     }
-    var loc = { lat: position.coords.latitude, lng: position.coords.longitude };
-    this.marker = new MQA.Poi(loc);
-    map.addShape(this.marker);
 }
 
 function mapScreenShow() {
+    navigator.geolocation.getCurrentPosition(function(position){
+        setMarker(position);
+        if(map){
+            map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude });
+        }
+    }, locErr, mapOpts);
 }
