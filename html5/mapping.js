@@ -34,11 +34,13 @@ function smallZoom(){
         map.addControl(new MQA.SmallZoom(), new MQA.MapCornerPlacement(MQA.MapCorner.TOP_LEFT, new MQA.Size(5,5)));
     });
 }
+
 function viewOptions(){
     MQA.withModule('viewoptions', function() {
         map.addControl(new MQA.ViewOptions());
     });
 }
+
 function geoLocationControl(){
     MQA.withModule('geolocationcontrol', function() {
         map.addControl(new MQA.GeolocationControl());
