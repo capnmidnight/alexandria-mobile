@@ -18,7 +18,7 @@
             <a class="button" onclick="showTab('settings')">settings</a>
         </header>
         <div id="main">
-            <section id="notes"><ul></ul></section>
+            <section id="notes"></section>
             <section id="map"><div id="inner-map"></div></section>
             <section id="calendar"></section>
 
@@ -196,7 +196,7 @@
         var s = document.createElement("script");
         s.async = 1;
         s.addEventListener("load", function () {
-            include("require.js", "psychologist.js", "stuffing.js", "mapping.js", "app.js", "notes.js");
+            include("require.js", "psychologist.js", "stuffing.js", "app.js", "notes.js", "mapping.js", "calendar.js");
         }, false);
         s.src = "include.js#v" + curAppVersion;
         document.body.appendChild(s);

@@ -2,8 +2,6 @@
     getData("axva-rss", function (obj) {
         var notes = getDOM("#notes");
         notes.innerHTML = "";
-        var items = [];
-        console.log(obj.calendar);
         for(var key in obj){
             if(obj.hasOwnProperty(key)){
                 var header = document.createElement("h2");

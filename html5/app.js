@@ -30,9 +30,6 @@ function resize() {
     window.scrollX = window.scrollY = 0;
 }
 
-function calendarScreenShow() { }
-function aboutScreenShow() { }
-
 function showTab(tab, skipState) {
     var boxes = getDOMAll("#main>*");
     boxes.forEach(function (box, i) {
