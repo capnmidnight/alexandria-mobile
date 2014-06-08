@@ -19,11 +19,11 @@
                 bestFitMargin: 0,
                 zoomOnDoubleClick: true
             });
+            smallZoom();
+            geoLocationControl();
             setMarker(position);
             navigator.geolocation.watchPosition(setMarker, locErr, mapOpts);
         }, locErr, mapOpts);
-        smallZoom();
-        geoLocationControl();
     }, function(err){
         console.error("Couldn't load MapQuest: ", err);
     });
