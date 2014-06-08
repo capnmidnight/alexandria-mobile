@@ -3,10 +3,11 @@
         var notes = getDOM("#notes");
         notes.innerHTML = "";
         var items = [];
+        console.log(obj.calendar);
         for(var key in obj){
             if(obj.hasOwnProperty(key)){
                 var header = document.createElement("h2");
-                header.innerHTML = obj[key].channel.title.match(/\|\s*(.+)/)[1];
+                header.innerHTML = obj[key].channel.title.match(/\|?\s*(.+)/)[1];
                 notes.appendChild(header);
 
                 var ul = document.createElement("ul");

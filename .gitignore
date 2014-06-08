@@ -3,8 +3,6 @@ obj/
 bin/
 cur/
 *.suo
-*.bat
-*.sh
 commands.txt
-commands-skip-pdf.txt
 www.alexandriava.gov/
+apps.alexandriava.gov/

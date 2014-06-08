@@ -1,5 +1,5 @@
 ﻿var http = require("./httpCacher.js"),
-    tagPattern = /<(\w+)((?:\s+[\w:]+\s*=\s*("|')[^<]+?\3)*)\s*>([^<]*)<\/\1>/,
+    tagPattern = /<([\w:]+)((?:\s+[\w:]+\s*=\s*("|')[^<]+?\3)*)\s*(?:\/>|>([^<]*)<\/\1>)/,
     attrPattern = /[\w:]+\s*=\s*("|')[^<]+?\1/g,
     attrNamePattern = /(\w+(:\w+)?)\s*=/,
     attrValuePattern = /=\s*("|')([^<]+?)\1/,
@@ -22,7 +22,7 @@ function proc(curObj, curTag, tagCollect){
     var tag = matches[1];
     var attrs = matches[2];
     var text = matches[4];
-    var subTags = text.match(subPattern);
+    var subTags = text && text.match(subPattern);
     var t = typeof(curObj[tag]);
     if(t == "undefined"){
         if(subTags){
