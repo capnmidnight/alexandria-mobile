@@ -31,6 +31,7 @@ function resize() {
 }
 
 var tagWhitelist = ["a", "u", "p", "br", "em", "ul", "li", "h1", "h2", "h3", "h4", "h5", "h6", "div", "font", "span", "strong"];
+var entityBlacklist = ["lt", "gt"];
 
 function cleanupRSS(txt){
     return txt.replace(/&lt;([\w:]+)((?:\s+[\w:]+\s*=\s*("|').+?\3)*)\s*(\/&gt;|&gt;(.*?)&lt;\/\1&gt;)/g, function(match, tag, attrs, quote, xfv, text, index, doc){
@@ -46,6 +47,17 @@ function cleanupRSS(txt){
             console.log(tag, match);
             return match;
         }
+    }).replace(/&amp;(\w+);/g, function(match, name){
+        if(entityBlacklist.indexOf(name) == -1){
+            return fmt("&$1;", name);
+        }
+        else{
+            return match;
+        }
+    }).replace(/(https?):\/\/([\w\d.\/?&=,]+)/g, function(match, protocol, url, index, doc){
+        return fmt("<a href=\"$1://$2\">$2</a>", protocol, url);
+    }).replace(/[\w\d.+-_]+@[\w\d.+-_]+/g, function(match, index, doc){
+        return fmt("<a href=\"mailto:$1\">$1</a>", match);
     });
 }
 
