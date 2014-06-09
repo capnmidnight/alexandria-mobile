@@ -6,6 +6,7 @@
 }
 
 #inner-map { width: 100%; height:100%; }
+.tag{border}
 
 header, form {
     -webkit-transition-property: all;
@@ -20,7 +21,7 @@ html, body, header, #main {
     position: absolute;
 }
 
-    html, body, section, #menu > p, #menu > a.button, #main, #main > div, #notes > ul {
+    html, body, section, #menu > p, #menu > a.button, #main, #main > div, section > ul {
         width: 100%;
     }
 
@@ -96,6 +97,8 @@ a.button {
     min-width: 2.5em;
     text-decoration: none;
     cursor: pointer;
+}
+a.button, .tag{
     border: solid 1px #ccc;
     border-radius: 5px;
 }

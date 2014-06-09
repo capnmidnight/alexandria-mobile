@@ -9,8 +9,7 @@ var mapOpts = {
 };
 
 function loadMap() {
-
-    getScript("http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluur2g6yn9%2Cb5%3Do5-9az2ur", function(){
+    if(false) getScript("http://open.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluur2g6yn9%2Cb5%3Do5-9az2ur", function(){
         map = new MQA.TileMap({
             elt: mapBox,
             zoom: 13,

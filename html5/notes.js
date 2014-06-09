@@ -1,4 +1,5 @@
-﻿function notesScreenShow() {
+﻿
+function notesScreenShow() {
     getData("notes", function (obj) {
         var notes = getDOM("#notes");
         notes.innerHTML = "";
@@ -15,13 +16,13 @@
                 obj[key].channel.item.forEach(function (item) {
                     var li = document.createElement("li"),
                         link = document.createElement("a"),
-                        date = document.createElement("span"),
+                        date = document.createElement("div"),
                         text = document.createElement("div");
 
                     link.innerHTML = item.title;
                     link.href = item.link;
                     date.innerHTML = item.pubDate;                    
-                    text.innerHTML = cleanupRSS(item.description);
+                    text.innerHTML = detectLinks(cleanupRSS(item.description));
 
                     ul.appendChild(li);
                     li.appendChild(link);

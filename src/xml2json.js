@@ -58,7 +58,6 @@ function proc(curObj, curTag, tagCollect){
     }
 }
 
-
 module.exports.parse = function(xml){
     var tags = lexTags(xml);
     var root = {};
