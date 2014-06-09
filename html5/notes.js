@@ -1,5 +1,5 @@
 ﻿function notesScreenShow() {
-    getData("axva-rss", function (obj) {
+    getData("notes", function (obj) {
         var notes = getDOM("#notes");
         notes.innerHTML = "";
         for(var key in obj){

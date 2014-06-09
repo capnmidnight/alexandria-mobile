@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{e7e06f33-eb96-4a1a-95cb-a856e8023b50}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -27,7 +27,7 @@
     <Compile Include="html5\require.js" />
     <Compile Include="src\controllers.js" />
     <Compile Include="src\controllers\calendar.js" />
-    <Compile Include="src\controllers\everything.js" />
+    <Compile Include="src\controllers\notes.js" />
     <Compile Include="src\getter.js" />
     <Compile Include="src\xml2json.js" />
     <Content Include="html5\axva.png" />
