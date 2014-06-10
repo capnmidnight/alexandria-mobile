@@ -61,6 +61,13 @@ function calendarScreenShow() {
             }
             if(item.location){
                 tableElements.push(["Location", detectLinks(item.location)]);
+                geocodio(item, function(coords){
+                    coords.forEach(function(coord){
+                        map.addShape(new MQA.Poi(coord));
+                    });
+                }, function(err){
+                    console.error("ERROR", err);
+                });
             }
             if(item.tags){
                 tableElements.push(["Tags", item.tags.map(function(tag){
@@ -73,6 +80,12 @@ function calendarScreenShow() {
             tableElements.push(["&nbsp;"]);
             tableElements.push([detectLinks(item.description)]);
             tableElements.push(["&nbsp;"]);
+
+            tableElements.map(function(rowArr){
+                return tr(rowArr.map(function(itm){
+                    return td({colSpan: 3 - rowArr.length}, itm);
+                }));
+            });
 
             tableElements.forEach(function(rowArr){
                 var row = document.createElement("tr");
@@ -92,4 +105,32 @@ function calendarScreenShow() {
             li.appendChild(table);
         });
     }, alert);
+}
+
+function geocodio(item, success, fail){
+    var geoCache = getSetting("geoCache") || {};
+    item.coords = geoCache[item.location];
+    if(item.coords){
+        success(item.coords);
+    }
+    else{
+        var query = item.location + ", Alexandria, VA 22314";
+        getData(makeURL("https://api.geocod.io/v1/geocode", {
+            q: query,
+            api_key: "8059303c907437fc74c094909e0747e94754560"
+        }), function(data){
+            if(data.error){
+                fail({input:query,output:data.error});
+            }
+            else{
+                item.coords = data.results.map(function(res){
+                    res.location.accuracy = res.accuracy;
+                    return res.location;
+                });
+                geoCache[item.location] = item.coords;
+                setSetting("geoCache", geoCache);
+                success(item.coords);
+            }
+        }, fail);
+    }
 }

@@ -261,3 +261,11 @@ function GET(url, success, fail){
     };
     xhr.send();
 }
+
+function makeURL(url, queryMap) {
+    var output = [];
+    for (var key in queryMap) {
+        output.push(encodeURIComponent(key) + "=" + encodeURIComponent(queryMap[key]));
+    }
+    return url + "?" + output.join("&");
+}
