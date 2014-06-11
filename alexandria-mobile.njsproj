@@ -32,6 +32,7 @@
     <Compile Include="src\xml2json.js" />
     <Content Include="html5\axva.png" />
     <Content Include="html5\axva64x64.png" />
+    <Content Include="html5\calendar.html" />
     <Content Include="html5\index.html" />
     <Content Include="package.json" />
     <Compile Include="html5\include.js" />

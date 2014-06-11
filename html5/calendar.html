@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+    <title>Alexandria Mobile</title>
+    <link type="image/png" rel="icon" href="axva64x64.png">
+    <link type="image/png" rel="apple-touch-icon" href="axva64x64.png">
+    <link type="text/css" rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a class="button" onclick="showTab('calendar')">calendar</a>
+    </header>
+    <div id="main">
+        <section id="calendar"></section>
+    </div>
+    <script id="setup">
+        var curAppVersion = 1, s = document.createElement("script");
+        s.async = 1;
+        s.addEventListener("load", function () {
+            include("require.js", "psychologist.js", "stuffing.js");
+        }, false);
+        s.src = "include.js#v" + curAppVersion;
+        document.body.appendChild(s);
+
+        function pageLoad() {
+            var calendar = getDOM("#calendar"),
+                start = new Date();
+            buildCalendar(calendar, start);
+        }
+
+        var DAY_MS = 24 * 60 * 60 * 1000,
+            MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        function buildCalendar(calendar, date) {
+            var start = new Date(date.getTime()),
+                currentMonth = start.getMonth(),
+                currentYear = start.getFullYear(),
+                today = new Date(),
+                ticks = start.setDate(1),
+                prevMonth = new Date(start.getTime() - DAY_MS),
+                nextMonth = new Date(start.getTime() + DAY_MS * 40),
+                table = document.createElement("table"),
+                head = document.createElement("thead"),
+                body = document.createElement("tbody"),
+                foot = document.createElement("tfoot"),
+                part = head;
+
+            ticks -= start.getDay() * DAY_MS;
+            start = new Date(ticks);
+            calendar.innerHTML = "";
+            table.appendChild(head);
+            table.appendChild(body);
+            table.appendChild(foot);
+
+            table.style.width = "100%";
+            calendar.appendChild(table);
+            do {
+                var row = document.createElement("tr");
+                part.appendChild(row);
+                if (part == head) {
+                    row.style.backgroundColor = "#c0c0c0";
+                }
+                for (var days = 0; part == head && days < 3 || part == body && days < 7; ++days) {
+                    var cell = document.createElement(part == head ? "th" : "td");
+                    row.appendChild(cell);
+                    cell.style.textAlign = "center";
+                    if (part == head) {
+                        switch (days) {
+                            case 0:
+                                cell.appendChild(
+                                    linkButton({
+                                        onclick: buildCalendar.bind(this, calendar, prevMonth)
+                                    }, "<<"));
+                                break;
+                            case 1:
+                                cell.appendChild(select({
+                                    onchange: function () {
+                                        var nextMonth = new Date(date.getTime());
+                                        nextMonth.setMonth(this.value);
+                                        buildCalendar(calendar, nextMonth);
+                                    }
+                                }, MONTHS.map(function (month, i) {
+                                    var opt = option({ value: i }, month);
+                                    if (currentMonth == i) {
+                                        opt.selected = true;
+                                    }
+                                    return opt;
+                                })));
+
+                                cell.appendChild(select({
+                                    onchange: function () {
+                                        var nextYear = new Date(date.getTime());
+                                        nextYear.setYear(this.value);
+                                        buildCalendar(calendar, nextYear);
+                                    }
+                                }, [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (dYear) {
+                                    var opt = option({
+                                        value: dYear + today.getFullYear(),
+                                    }, dYear + today.getFullYear());
+                                    if (dYear + today.getFullYear() == currentYear) {
+                                        opt.selected = true;
+                                    }
+                                    return opt;
+                                })));
+                                cell.colSpan = 5;
+                                break;
+                            case 2:
+                                cell.appendChild(
+                                    linkButton({
+                                        onclick: buildCalendar.bind(this, calendar, nextMonth)
+                                    }, ">>"));
+                                break;
+                        }
+                    }
+                    else {
+                        cell.innerHTML = start.getDate();
+                        if (start.getMonth() != currentMonth) {
+                            cell.style.color = "#c0c0c0";
+                        }
+                        else if (start.getFullYear() == today.getFullYear()
+                            && start.getMonth() == today.getMonth()
+                            && start.getDate() == today.getDate()) {
+                            cell.style.backgroundColor = "#ffc0c0";
+                        }
+                        else if (start.getDay() == 0 || start.getDay() == 6) {
+                            cell.style.backgroundColor = "#c0ffc0";
+                        }
+                        cell.style.textAlign = "right";
+                        cell.style.verticalAlign = "top";
+                        cell.style.height = "3em";
+                        start = new Date(start.getTime() + DAY_MS);
+                    }
+                }
+                part = body;
+            } while ((start.getFullYear() * 100 + start.getMonth()) <= (currentYear * 100 + currentMonth));
+        }
+    </script>
+</body>
+</html>

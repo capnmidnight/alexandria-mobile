@@ -29,8 +29,9 @@ html, body, section {
     height: 100%;
 }
 
-#main {
-    overflow: scroll;
+section {
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -72,11 +73,6 @@ aside {
     padding: 0.5em;
     border-width: 5px;
     top: 2em;
-}
-
-td {
-    width: 3em;
-    cursor: pointer;
 }
 
 aside, a.button {
