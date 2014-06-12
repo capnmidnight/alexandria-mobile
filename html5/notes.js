@@ -8,7 +8,7 @@ function notesScreenShow() {
                 var header = document.createElement("h2"),
                     ul = document.createElement("ul");
 
-                header.innerHTML = obj[key].channel.title.match(/\|?\s*(.+)/)[1];
+                header.innerHTML = obj[key].channel.title.split("|")[1].trim();
 
                 notes.appendChild(header);
                 notes.appendChild(ul);

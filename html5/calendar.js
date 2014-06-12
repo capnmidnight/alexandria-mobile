@@ -42,10 +42,11 @@ function calendarScreenShow() {
 
             var li = document.createElement("li"),
                 link = document.createElement("a"),
-                matches = item.title.match(datePattern),
-                startDate = makeDate(matches[1], matches[2], matches[3], matches[4], matches[5] || matches[11], matches[6] || matches[12]),
-                endDate = makeDate(matches[7] || matches[1], matches[8] || matches[2], matches[9] || matches[3], matches[10] || matches[4], matches[11] || matches[5], matches[12] || matches[6]),
-                table = document.createElement("table");
+                table = document.createElement("table"),
+                matches = item.title.match(datePattern);
+            
+            item.startDate = makeDate(matches[1], matches[2], matches[3], matches[4], matches[5] || matches[11], matches[6] || matches[12]);
+            item.endDate = makeDate(matches[7] || matches[1], matches[8] || matches[2], matches[9] || matches[3], matches[10] || matches[4], matches[11] || matches[5], matches[12] || matches[6]);;
 
             link.innerHTML = item.title.replace(datePattern, "");
             link.href = item.link;
